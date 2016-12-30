@@ -28,6 +28,8 @@ create table ASISTENCIA (
    constraint PK_ASISTENCIA primary key (ID_ASISTENCIA)
 );
 
+ALTER TABLE asistencia OWNER TO fundatca_per;
+
 /*==============================================================*/
 /* Index: ASSIST_PK                                             */
 /*==============================================================*/
@@ -52,6 +54,8 @@ create table EMPLEADO (
    APELLIDO_MATERNO_EMPLEADO VARCHAR(128)         null,
    constraint PK_EMPLEADO primary key (CI_EMPLEADO)
 );
+
+ALTER TABLE empleado OWNER TO fundatca_per;
 
 /*==============================================================*/
 /* Index: EMPLOYEE_PK                                           */

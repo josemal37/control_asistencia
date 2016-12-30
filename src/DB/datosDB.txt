@@ -1,0 +1,5 @@
+ip:             127.0.0.1
+puerto:         5432
+base de datos:  fundatca_personal
+usuario:        fundatca_per
+password:       personal123

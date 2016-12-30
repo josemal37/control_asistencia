@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Controlador;
 
 import Modelo.ModeloAsistencia;
@@ -22,14 +21,14 @@ import java.util.logging.Logger;
  * @author Jose
  */
 public class ControladorAsistencia {
-    
+
     //modelos
     ModeloAsistencia modeloAsistencia;
     ModeloTiempo modeloTiempo;
-    
+
     //vistas
     VistaRegistroAsistencia vistaRegistroAsistencia;
-    
+
     public ControladorAsistencia() {
         this.vistaRegistroAsistencia = new VistaRegistroAsistencia(this);
     }
@@ -57,7 +56,7 @@ public class ControladorAsistencia {
     public void setVistaRegistroAsistencia(VistaRegistroAsistencia vistaRegistroAsistencia) {
         this.vistaRegistroAsistencia = vistaRegistroAsistencia;
     }
-    
+
     public Time getHora(String hora) {
         Time res = null;
         try {
@@ -67,39 +66,27 @@ public class ControladorAsistencia {
         }
         return res;
     }
-    
+
     public Date getFechaActual() {
         return this.modeloTiempo.getFechaActual();
     }
-    
+
     public Time getHoraActual() {
         return this.modeloTiempo.getHoraActual();
     }
-    
+
     public void registrarAsistencia(int ciEmpleado, Date fechaActual, Time horaActual) {
-        
+
+        try {
             //definimos la hora actual en formato cadena
-            String horaActualCadena = (horaActual.getHours() + 1) + ":" + (horaActual.getMinutes() + 1);
-            
+            String horaActualCadena = this.getHoraCadena(horaActual);
+
             //registramos los datos
             if (horaActualCadena.compareTo("13:30") >= 0) {
                 registrarAsistenciaTarde(ciEmpleado, fechaActual, horaActual);
             } else if (horaActualCadena.compareTo("07:50") >= 0) {
                 registrarAsistenciaManiana(ciEmpleado, fechaActual, horaActual);
             }
-    }
-    
-    public void registrarAsistenciaManiana(int ciEmpleado, Date fecha, Time hora) {
-        try {
-            this.modeloAsistencia.insertAsistenciaManiana(ciEmpleado, fecha, hora);
-        } catch (SQLException ex) {
-            Logger.getLogger(ControladorAsistencia.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void registrarAsistenciaTarde(int ciEmpleado, Date fecha, Time hora) {
-        try {
-            this.modeloAsistencia.insertAsistenciaTarde(ciEmpleado, fecha, hora);
         } catch (SQLException ex) {
             int sqlState = Integer.parseInt(ex.getSQLState());
             switch(sqlState) {
@@ -107,9 +94,35 @@ public class ControladorAsistencia {
                     VistaMensajes.mostrarMensaje("El CI ingresado no se encuentra registrado.");
                     break;
                 default:
-                    ex.printStackTrace();
+                    VistaMensajes.mostrarMensaje("Hubo un error en la base de datos: " + sqlState + ".");
                     break;
             }
         }
+    }
+
+    private String getHoraCadena(Time hora) {
+        String res = "";
+        int horaI = hora.getHours();
+        int minutosI = hora.getMinutes();
+        if (horaI < 10) {
+            res = res + "0" + horaI;
+        } else {
+            res = res + horaI;
+        }
+        res = res + ":";
+        if (minutosI < 10) {
+            res = res + "0" + minutosI;
+        } else {
+            res = res + minutosI;
+        }
+        return res;
+    }
+
+    public void registrarAsistenciaManiana(int ciEmpleado, Date fecha, Time hora) throws SQLException {
+        this.modeloAsistencia.insertAsistenciaManiana(ciEmpleado, fecha, hora);
+    }
+
+    public void registrarAsistenciaTarde(int ciEmpleado, Date fecha, Time hora) throws SQLException {
+        this.modeloAsistencia.insertAsistenciaTarde(ciEmpleado, fecha, hora);
     }
 }
