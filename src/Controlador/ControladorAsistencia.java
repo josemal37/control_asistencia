@@ -75,17 +75,41 @@ public class ControladorAsistencia {
         return this.modeloTiempo.getHoraActual();
     }
 
-    public void registrarAsistencia(int ciEmpleado, Date fechaActual, Time horaActual) {
+    public boolean registrarAsistencia(int ciEmpleado, Date fechaActual, Time horaActual) {
 
+        boolean exitoso = false;
+        
         try {
             //definimos la hora actual en formato cadena
             String horaActualCadena = this.getHoraCadena(horaActual);
 
             //registramos los datos
+            int registrado = ModeloAsistencia.REGISTRADO_ERROR;
             if (horaActualCadena.compareTo("13:30") >= 0) {
-                registrarAsistenciaTarde(ciEmpleado, fechaActual, horaActual);
+                registrado = this.registrarAsistenciaTarde(ciEmpleado, fechaActual, horaActual);
             } else if (horaActualCadena.compareTo("07:50") >= 0) {
-                registrarAsistenciaManiana(ciEmpleado, fechaActual, horaActual);
+                registrado = this.registrarAsistenciaManiana(ciEmpleado, fechaActual, horaActual);
+            }
+            switch(registrado) {
+                case ModeloAsistencia.REGISTRADO_INGRESO_MANIANA:
+                    VistaMensajes.mostrarMensaje("Registro ingreso mañana a las " + horaActualCadena + " exitoso.");
+                    exitoso = true;
+                    break;
+                case ModeloAsistencia.REGISTRADO_SALIDA_MANIANA:
+                    VistaMensajes.mostrarMensaje("Registro salida mañana a las " + horaActualCadena + " exitoso.");
+                    exitoso = true;
+                    break;
+                case ModeloAsistencia.REGISTRADO_INGRESO_TARDE:
+                    VistaMensajes.mostrarMensaje("Registro ingreso tarde a las " + horaActualCadena + " exitoso.");
+                    exitoso = true;
+                    break;
+                case ModeloAsistencia.REGISTRADO_SALIDA_TARDE:
+                    VistaMensajes.mostrarMensaje("Registro salida tarde a las " + horaActualCadena + " exitoso.");
+                    exitoso = true;
+                    break;
+                case ModeloAsistencia.REGISTRADO_ERROR:
+                    VistaMensajes.mostrarMensaje("Hubo un error al registrar los datos.");
+                    break;
             }
         } catch (SQLException ex) {
             int sqlState = Integer.parseInt(ex.getSQLState());
@@ -98,6 +122,8 @@ public class ControladorAsistencia {
                     break;
             }
         }
+        
+        return exitoso;
     }
 
     private String getHoraCadena(Time hora) {
@@ -118,11 +144,11 @@ public class ControladorAsistencia {
         return res;
     }
 
-    public void registrarAsistenciaManiana(int ciEmpleado, Date fecha, Time hora) throws SQLException {
-        this.modeloAsistencia.insertAsistenciaManiana(ciEmpleado, fecha, hora);
+    public int registrarAsistenciaManiana(int ciEmpleado, Date fecha, Time hora) throws SQLException {
+        return this.modeloAsistencia.insertAsistenciaManiana(ciEmpleado, fecha, hora);
     }
 
-    public void registrarAsistenciaTarde(int ciEmpleado, Date fecha, Time hora) throws SQLException {
-        this.modeloAsistencia.insertAsistenciaTarde(ciEmpleado, fecha, hora);
+    public int registrarAsistenciaTarde(int ciEmpleado, Date fecha, Time hora) throws SQLException {
+        return this.modeloAsistencia.insertAsistenciaTarde(ciEmpleado, fecha, hora);
     }
 }

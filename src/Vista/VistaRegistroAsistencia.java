@@ -94,7 +94,9 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
             Date fechaActual = this.controladorAsistencia.getFechaActual();
 
             //registramos los datos
-            this.controladorAsistencia.registrarAsistencia(ciEmpleado, fechaActual, horaActual);
+            if(this.controladorAsistencia.registrarAsistencia(ciEmpleado, fechaActual, horaActual)) {
+                this.jTextFieldCI.setText("");
+            }
         } catch (NumberFormatException ex) {
             VistaMensajes.mostrarMensaje("El CI introducido no es válido.");
         }

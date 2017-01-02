@@ -90,6 +90,12 @@ public class ModeloAsistencia extends Conexion {
             + "ci_empleado = ? AND "
             + "fecha_asistencia = ? AND "
             + "ingreso_tarde is not null ";
+    
+    public static final int REGISTRADO_INGRESO_MANIANA = 1;
+    public static final int REGISTRADO_SALIDA_MANIANA = 2;
+    public static final int REGISTRADO_INGRESO_TARDE = 3;
+    public static final int REGISTRADO_SALIDA_TARDE = 4;
+    public static final int REGISTRADO_ERROR = -1;
 
     public ModeloAsistencia() throws ClassNotFoundException, SQLException {
         super();
@@ -120,7 +126,7 @@ public class ModeloAsistencia extends Conexion {
         return res;
     }
 
-    public void insertAsistencia(int ciEmpleado, Date fecha, Time ingresoManiana, Time salidaManiana, Time ingresoTarde, Time salidaTarde) throws SQLException {
+    public boolean insertAsistencia(int ciEmpleado, Date fecha, Time ingresoManiana, Time salidaManiana, Time ingresoTarde, Time salidaTarde) throws SQLException {
         PreparedStatement pst = this.getConexion().prepareStatement(INSERT_ASISTENCIA);
         pst.setInt(1, ciEmpleado);
         pst.setDate(2, fecha);
@@ -129,66 +135,91 @@ public class ModeloAsistencia extends Conexion {
         pst.setTime(5, ingresoTarde);
         pst.setTime(6, salidaTarde);
 
-        pst.execute();
+        return pst.executeUpdate() > 0;
     }
     
-    public void insertAsistenciaManiana(int ciEmpleado, Date fecha, Time hora) throws SQLException {
+    public int insertAsistenciaManiana(int ciEmpleado, Date fecha, Time hora) throws SQLException {
+        int registrado = REGISTRADO_ERROR;
         if(this.asistenciaRegistrada(ciEmpleado, fecha)) {
-            this.updateSalidaManiana(ciEmpleado, fecha, hora);
+            registrado = this.updateSalidaManiana(ciEmpleado, fecha, hora);
         } else {
-            this.insertIngresoManiana(ciEmpleado, fecha, hora);
+            registrado = this.insertIngresoManiana(ciEmpleado, fecha, hora);
         }
+        return registrado;
     }
 
-    public void insertIngresoManiana(int ciEmpleado, Date fecha, Time ingresoManiana) throws SQLException {
-        this.insertAsistencia(ciEmpleado, fecha, ingresoManiana, null, null, null);
+    public int insertIngresoManiana(int ciEmpleado, Date fecha, Time ingresoManiana) throws SQLException {
+        int registrado = REGISTRADO_ERROR;
+        if(this.insertAsistencia(ciEmpleado, fecha, ingresoManiana, null, null, null)) {
+            registrado =  REGISTRADO_INGRESO_MANIANA;
+        }
+        return registrado;
     }
     
-    public void updateSalidaManiana(int ci_empleado, Date fecha, Time salidaManiana) throws SQLException {
+    public int updateSalidaManiana(int ci_empleado, Date fecha, Time salidaManiana) throws SQLException {
         PreparedStatement pst = this.getConexion().prepareStatement(UPDATE_SALIDA_MANIANA);
         pst.setTime(1, salidaManiana);
         pst.setInt(2, ci_empleado);
         pst.setDate(3, fecha);
         
-        pst.execute();
+        int registrado = REGISTRADO_ERROR;
+        
+        if(pst.executeUpdate() > 0) {
+            registrado = REGISTRADO_SALIDA_MANIANA;
+        }
+        return registrado;
     }
     
-    public void insertAsistenciaTarde(int ciEmpleado, Date fecha, Time hora) throws SQLException {
+    public int insertAsistenciaTarde(int ciEmpleado, Date fecha, Time hora) throws SQLException {
+        int registrado = REGISTRADO_ERROR;
         if(this.asistenciaRegistrada(ciEmpleado, fecha)) {
             if(this.asistenciaTardeRegistrada(ciEmpleado, fecha)) {
-                this.updateSalidaTarde(ciEmpleado, fecha, hora);
+                registrado = this.updateSalidaTarde(ciEmpleado, fecha, hora);
             } else {
-                this.updateIngresoTarde(ciEmpleado, fecha, hora);
+                registrado = this.updateIngresoTarde(ciEmpleado, fecha, hora);
             }
         } else {
-            this.insertIngresoTarde(ciEmpleado, fecha, hora);
+            registrado = this.insertIngresoTarde(ciEmpleado, fecha, hora);
         }
+        return registrado;
     }
 
-    public void insertIngresoTarde(int ciEmpleado, Date fecha, Time ingresoTarde) throws SQLException {
+    public int insertIngresoTarde(int ciEmpleado, Date fecha, Time ingresoTarde) throws SQLException {
+        int registrado = REGISTRADO_ERROR;
         if (this.asistenciaRegistrada(ciEmpleado, fecha)) {
-            this.updateIngresoTarde(ciEmpleado, fecha, ingresoTarde);
+            registrado = this.updateIngresoTarde(ciEmpleado, fecha, ingresoTarde);
         } else {
-            this.insertAsistencia(ciEmpleado, fecha, null, null, ingresoTarde, null);
+            if(this.insertAsistencia(ciEmpleado, fecha, null, null, ingresoTarde, null)) {
+                registrado = REGISTRADO_INGRESO_TARDE;
+            }
         }
+        return registrado;
     }
     
-    public void updateIngresoTarde(int ciEmpleado, Date fecha, Time ingresoTarde) throws SQLException {
+    public int updateIngresoTarde(int ciEmpleado, Date fecha, Time ingresoTarde) throws SQLException {
         PreparedStatement pst = this.getConexion().prepareStatement(UPDATE_INGRESO_TARDE);
         pst.setTime(1, ingresoTarde);
         pst.setInt(2, ciEmpleado);
         pst.setDate(3, fecha);
         
-        pst.execute();
+        int registrado = REGISTRADO_ERROR;
+        if(pst.executeUpdate() > 0) {
+            registrado = REGISTRADO_INGRESO_TARDE;
+        }
+        return registrado;
     }
     
-    public void updateSalidaTarde(int ciEmpleado, Date fecha, Time salidaTarde) throws SQLException {
+    public int updateSalidaTarde(int ciEmpleado, Date fecha, Time salidaTarde) throws SQLException {
         PreparedStatement pst = this.getConexion().prepareStatement(UPDATE_SALIDA_TARDE);
         pst.setTime(1, salidaTarde);
         pst.setInt(2, ciEmpleado);
         pst.setDate(3, fecha);
         
-        pst.execute();
+        int registrado = REGISTRADO_ERROR;
+        if(pst.executeUpdate() > 0) {
+            registrado = REGISTRADO_SALIDA_TARDE;
+        }
+        return registrado;
     }
     
     public int selectCountAsistenciaTarde(int ciEmpleado, Date fecha) throws SQLException {
