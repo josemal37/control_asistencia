@@ -107,6 +107,10 @@ public class ControladorAsistencia {
                     VistaMensajes.mostrarMensaje("Registro salida tarde a las " + horaActualCadena + " exitoso.");
                     exitoso = true;
                     break;
+                case ModeloAsistencia.REGISTRADO_ANTERIOR:
+                    VistaMensajes.mostrarMensaje("Usted ya registró una salida para este horario.");
+                    exitoso = true;
+                    break;
                 case ModeloAsistencia.REGISTRADO_ERROR:
                     VistaMensajes.mostrarMensaje("Hubo un error al registrar los datos.");
                     break;
