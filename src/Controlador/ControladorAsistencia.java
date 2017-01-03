@@ -5,7 +5,9 @@
  */
 package Controlador;
 
+import Dominio.Empleado;
 import Modelo.ModeloAsistencia;
+import Modelo.ModeloEmpleado;
 import Modelo.ModeloTiempo;
 import Vista.VistaMensajes;
 import Vista.VistaRegistroAsistencia;
@@ -24,6 +26,7 @@ public class ControladorAsistencia {
 
     //modelos
     ModeloAsistencia modeloAsistencia;
+    ModeloEmpleado modeloEmpleado;
     ModeloTiempo modeloTiempo;
 
     //vistas
@@ -37,20 +40,28 @@ public class ControladorAsistencia {
         return modeloAsistencia;
     }
 
-    public ModeloTiempo getModeloTiempo() {
-        return modeloTiempo;
-    }
-
-    public VistaRegistroAsistencia getVistaRegistroAsistencia() {
-        return vistaRegistroAsistencia;
-    }
-
     public void setModeloAsistencia(ModeloAsistencia modeloAsistencia) {
         this.modeloAsistencia = modeloAsistencia;
     }
 
+    public ModeloEmpleado getModeloEmpleado() {
+        return modeloEmpleado;
+    }
+
+    public void setModeloEmpleado(ModeloEmpleado modeloEmpleado) {
+        this.modeloEmpleado = modeloEmpleado;
+    }
+
+    public ModeloTiempo getModeloTiempo() {
+        return modeloTiempo;
+    }
+
     public void setModeloTiempo(ModeloTiempo modeloTiempo) {
         this.modeloTiempo = modeloTiempo;
+    }
+
+    public VistaRegistroAsistencia getVistaRegistroAsistencia() {
+        return vistaRegistroAsistencia;
     }
 
     public void setVistaRegistroAsistencia(VistaRegistroAsistencia vistaRegistroAsistencia) {
@@ -90,25 +101,29 @@ public class ControladorAsistencia {
             } else if (horaActualCadena.compareTo("07:50") >= 0) {
                 registrado = this.registrarAsistenciaManiana(ciEmpleado, fechaActual, horaActual);
             }
+            //recuperamos los datos del empleado
+            Empleado e = this.modeloEmpleado.selectEmpleadoPorCI(ciEmpleado);
+            
+            //mostramos un mensaje de registro de asistencia
             switch(registrado) {
                 case ModeloAsistencia.REGISTRADO_INGRESO_MANIANA:
-                    VistaMensajes.mostrarMensaje("Registro ingreso mañana a las " + horaActualCadena + " exitoso.");
+                    VistaMensajes.mostrarMensaje(e + "\nRegistro ingreso mañana a las " + horaActualCadena + " exitoso.");
                     exitoso = true;
                     break;
                 case ModeloAsistencia.REGISTRADO_SALIDA_MANIANA:
-                    VistaMensajes.mostrarMensaje("Registro salida mañana a las " + horaActualCadena + " exitoso.");
+                    VistaMensajes.mostrarMensaje(e + "\nRegistro salida mañana a las " + horaActualCadena + " exitoso.");
                     exitoso = true;
                     break;
                 case ModeloAsistencia.REGISTRADO_INGRESO_TARDE:
-                    VistaMensajes.mostrarMensaje("Registro ingreso tarde a las " + horaActualCadena + " exitoso.");
+                    VistaMensajes.mostrarMensaje(e + "\nRegistro ingreso tarde a las " + horaActualCadena + " exitoso.");
                     exitoso = true;
                     break;
                 case ModeloAsistencia.REGISTRADO_SALIDA_TARDE:
-                    VistaMensajes.mostrarMensaje("Registro salida tarde a las " + horaActualCadena + " exitoso.");
+                    VistaMensajes.mostrarMensaje(e + "\nRegistro salida tarde a las " + horaActualCadena + " exitoso.");
                     exitoso = true;
                     break;
                 case ModeloAsistencia.REGISTRADO_ANTERIOR:
-                    VistaMensajes.mostrarMensaje("Usted ya registró una salida para este horario.");
+                    VistaMensajes.mostrarMensaje(e + "\nUsted ya registró una salida para este horario.");
                     exitoso = true;
                     break;
                 case ModeloAsistencia.REGISTRADO_ERROR:

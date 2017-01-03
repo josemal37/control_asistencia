@@ -6,6 +6,7 @@
 package Controlador;
 
 import Modelo.ModeloAsistencia;
+import Modelo.ModeloEmpleado;
 import Modelo.ModeloTiempo;
 import Vista.VistaMensajes;
 import Vista.VistaPrincipal;
@@ -24,11 +25,13 @@ public class ControladorPrincipal {
         try {
             //modelos
             ModeloAsistencia modeloAsistencia = new ModeloAsistencia();
+            ModeloEmpleado modeloEmpleado = new ModeloEmpleado();
             ModeloTiempo modeloTiempo = new ModeloTiempo();
             
             //controladores
             controladorAsistencia = new ControladorAsistencia();
             controladorAsistencia.setModeloAsistencia(modeloAsistencia);
+            controladorAsistencia.setModeloEmpleado(modeloEmpleado);
             controladorAsistencia.setModeloTiempo(modeloTiempo);
             
             //vistas
