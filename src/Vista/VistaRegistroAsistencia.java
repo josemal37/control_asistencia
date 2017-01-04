@@ -8,6 +8,7 @@ package Vista;
 import Controlador.ControladorAsistencia;
 import java.sql.Date;
 import java.sql.Time;
+import javax.swing.JButton;
 
 /**
  *
@@ -22,6 +23,10 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
         initComponents();
     }
 
+    public JButton getjButtonAceptar() {
+        return jButtonAceptar;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -29,14 +34,14 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldCI = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jButtonAceptar = new javax.swing.JButton();
 
         jLabel1.setText("Ingrese su CI");
 
-        jButton1.setText("Aceptar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAceptar.setText("Aceptar");
+        jButtonAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonAceptarActionPerformed(evt);
             }
         });
 
@@ -50,7 +55,7 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jTextFieldCI, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(jButtonAceptar)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -60,7 +65,7 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTextFieldCI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1))
+                        .addComponent(jButtonAceptar))
                     .addComponent(jLabel1))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -83,7 +88,7 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
 
         try {
             //recuperamos el ci del empleado
@@ -100,10 +105,12 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
         } catch (NumberFormatException ex) {
             VistaMensajes.mostrarMensaje("El CI introducido no es válido.");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+        this.jTextFieldCI.requestFocus();
+    }//GEN-LAST:event_jButtonAceptarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonAceptar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextFieldCI;

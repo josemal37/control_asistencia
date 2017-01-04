@@ -10,6 +10,7 @@ import Modelo.ModeloEmpleado;
 import Modelo.ModeloTiempo;
 import Vista.VistaMensajes;
 import Vista.VistaPrincipal;
+import Vista.VistaRegistroAsistencia;
 import java.sql.SQLException;
 
 /**
@@ -36,8 +37,10 @@ public class ControladorPrincipal {
             
             //vistas
             vistaPrincipal = new VistaPrincipal();
-            vistaPrincipal.setPanelPrincipal(controladorAsistencia.getVistaRegistroAsistencia());
+            VistaRegistroAsistencia vistaRegistroAsistencia = controladorAsistencia.getVistaRegistroAsistencia();
+            vistaPrincipal.setPanelPrincipal(vistaRegistroAsistencia);
             vistaPrincipal.setLocationRelativeTo(null);
+            vistaPrincipal.getRootPane().setDefaultButton(vistaRegistroAsistencia.getjButtonAceptar());
             vistaPrincipal.setVisible(true);
         } catch (ClassNotFoundException ex) {
             VistaMensajes.mostrarMensaje(ex.getMessage());
