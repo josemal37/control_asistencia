@@ -131,9 +131,9 @@ public class ControladorAsistencia {
                     break;
             }
         } catch (SQLException ex) {
-            int sqlState = Integer.parseInt(ex.getSQLState());
+            String sqlState = ex.getSQLState();
             switch(sqlState) {
-                case 23503:
+                case "23503":
                     VistaMensajes.mostrarMensaje("El CI ingresado no se encuentra registrado.");
                     break;
                 default:

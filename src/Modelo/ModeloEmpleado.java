@@ -22,9 +22,12 @@ public class ModeloEmpleado extends Conexion {
             + "ci_empleado, "
             + "nombre_empleado, "
             + "apellido_paterno_empleado, "
-            + "apellido_materno_empleado "
+            + "apellido_materno_empleado, "
+            + "nombre_tipo_empleado "
             + "FROM "
             + "empleado "
+            + "INNER JOIN tipo_empleado ON "
+            + "tipo_empleado.id_tipo_empleado = empleado.id_tipo_empleado "
             + "WHERE "
             + "ci_empleado = ? ";
     
@@ -44,6 +47,7 @@ public class ModeloEmpleado extends Conexion {
             e.setNombre(rs.getString("nombre_empleado"));
             e.setApellidoPaterno(rs.getString("apellido_paterno_empleado"));
             e.setApellidoMaterno(rs.getString("apellido_materno_empleado"));
+            e.setTipoEmpleado(rs.getString("nombre_tipo_empleado"));
         }
         return e;
     }
