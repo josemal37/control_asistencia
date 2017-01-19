@@ -16,7 +16,8 @@ public class Empleado {
     private String nombre;
     private String apellidoPaterno;
     private String apellidoMaterno;
-    private String tipoEmpleado;
+    private int idTipoEmpleado;
+    private String nombreTipoEmpleado;
     
     public Empleado() {
         
@@ -54,12 +55,20 @@ public class Empleado {
         this.apellidoMaterno = apellidoMaterno;
     }
 
-    public String getTipoEmpleado() {
-        return tipoEmpleado;
+    public int getIdTipoEmpleado() {
+        return idTipoEmpleado;
     }
 
-    public void setTipoEmpleado(String tipoEmpleado) {
-        this.tipoEmpleado = tipoEmpleado;
+    public void setIdTipoEmpleado(int idTipoEmpleado) {
+        this.idTipoEmpleado = idTipoEmpleado;
+    }
+
+    public String getNombreTipoEmpleado() {
+        return nombreTipoEmpleado;
+    }
+
+    public void setNombreTipoEmpleado(String nombreTipoEmpleado) {
+        this.nombreTipoEmpleado = nombreTipoEmpleado;
     }
     
     @Override

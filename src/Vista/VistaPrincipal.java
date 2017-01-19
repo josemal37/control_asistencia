@@ -6,6 +6,7 @@
 
 package Vista;
 
+import Controlador.ControladorEmpleado;
 import javax.swing.JPanel;
 
 
@@ -41,16 +42,27 @@ public class VistaPrincipal extends javax.swing.JFrame {
         JPanelPrincipal = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Control de asistencia");
+        setMinimumSize(new java.awt.Dimension(640, 480));
 
         JPanelPrincipal.setLayout(new java.awt.BorderLayout());
 
         jMenu1.setText("Archivo");
+
+        jMenuItem3.setText("Ver empleados");
+        jMenuItem3.setMinimumSize(new java.awt.Dimension(640, 480));
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem3);
 
         jMenuItem1.setText("Salir");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -98,6 +110,10 @@ public class VistaPrincipal extends javax.swing.JFrame {
         VistaMensajes.mostrarMensaje("Control de Asistencia\nAutor: Jose Arandia Luna (jose.arandia.luna@gmail.com)");
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        ControladorEmpleado c = new ControladorEmpleado(this);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanelPrincipal;
     private javax.swing.JMenu jMenu1;
@@ -105,6 +121,7 @@ public class VistaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     // End of variables declaration//GEN-END:variables
 
 }
