@@ -15,7 +15,7 @@ import javax.swing.JPanel;
  *
  * @author Jose
  */
-public class JDialogEmpleado extends javax.swing.JDialog {
+public class JDialogEmpleado extends javax.swing.JDialog implements TienePassword {
 
     ControladorEmpleado controladorEmpleado;
     
@@ -28,7 +28,7 @@ public class JDialogEmpleado extends javax.swing.JDialog {
         
         initComponents();
         
-        this.setVistaEmpleados();
+        this.setVistaPassword();
     }
 
     public void setVistaEmpleados() {
@@ -43,11 +43,21 @@ public class JDialogEmpleado extends javax.swing.JDialog {
         this.cambiarVista(vistaRegistrarEmpleado);
     }
     
+    public void setVistaPassword() {
+        VistaPassword vistaPassword = new VistaPassword(this);
+        this.cambiarVista(vistaPassword);
+    }
+    
     private void cambiarVista(JPanel panel) {
         this.jPanelPrincipal.removeAll();
         this.jPanelPrincipal.add(panel);
         this.revalidate();
         this.repaint();
+    }
+    
+    @Override
+    public void vistaPrincipal() {
+        this.setVistaEmpleados();
     }
     
     /**

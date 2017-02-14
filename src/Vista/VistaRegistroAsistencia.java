@@ -6,6 +6,7 @@
 package Vista;
 
 import Controlador.ControladorAsistencia;
+import Modelo.ModeloAsistencia;
 import java.sql.Date;
 import java.sql.Time;
 import javax.swing.JButton;
@@ -31,6 +32,7 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -39,6 +41,11 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
         jTextFieldCI = new javax.swing.JTextField();
         jButtonAceptar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jRadioButtonIngresoTarde = new javax.swing.JRadioButton();
+        jRadioButtonSalidaManiana = new javax.swing.JRadioButton();
+        jRadioButtonSalidaTarde = new javax.swing.JRadioButton();
+        jRadioButtonIngresoManiana = new javax.swing.JRadioButton();
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 60)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -98,15 +105,67 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
+        buttonGroup1.add(jRadioButtonIngresoTarde);
+        jRadioButtonIngresoTarde.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jRadioButtonIngresoTarde.setText("Ingreso tarde");
+
+        buttonGroup1.add(jRadioButtonSalidaManiana);
+        jRadioButtonSalidaManiana.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jRadioButtonSalidaManiana.setText("Salida mañana");
+
+        buttonGroup1.add(jRadioButtonSalidaTarde);
+        jRadioButtonSalidaTarde.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jRadioButtonSalidaTarde.setText("Salida tarde");
+
+        buttonGroup1.add(jRadioButtonIngresoManiana);
+        jRadioButtonIngresoManiana.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        jRadioButtonIngresoManiana.setSelected(true);
+        jRadioButtonIngresoManiana.setText("Ingreso mañana");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jRadioButtonIngresoManiana, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButtonSalidaManiana, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jRadioButtonIngresoTarde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jRadioButtonSalidaTarde, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButtonIngresoManiana)
+                    .addComponent(jRadioButtonIngresoTarde))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButtonSalidaManiana)
+                    .addComponent(jRadioButtonSalidaTarde))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 153, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -161,18 +220,33 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
             Time horaActual = this.controladorAsistencia.getHoraActual();
             Date fechaActual = this.controladorAsistencia.getFechaActual();
 
+            //recuperamos el horario seleccionado
+            String tipoAsistencia = "";
+            if (this.jRadioButtonIngresoManiana.isSelected()) {
+                tipoAsistencia = ModeloAsistencia.INGRESO_MANIANA;
+            } else if (this.jRadioButtonSalidaManiana.isSelected()) {
+                tipoAsistencia = ModeloAsistencia.SALIDA_MANIANA;
+            } else if (this.jRadioButtonIngresoTarde.isSelected()) {
+                tipoAsistencia = ModeloAsistencia.INGRESO_TARDE;
+            } else if (this.jRadioButtonSalidaTarde.isSelected()) {
+                tipoAsistencia = ModeloAsistencia.SALIDA_TARDE;
+            }
+            
             //registramos los datos
-            if(this.controladorAsistencia.registrarAsistencia(ciEmpleado, fechaActual, horaActual)) {
-                this.jTextFieldCI.setText("");
+            {
+                if (this.controladorAsistencia.registrarAsistencia(ciEmpleado, fechaActual, horaActual, tipoAsistencia)) {
+                    this.jTextFieldCI.setText("");
+                }
             }
         } catch (NumberFormatException ex) {
             VistaMensajes.mostrarMensaje("El CI introducido no es válido.");
         }
-        
+
         this.jTextFieldCI.requestFocus();
     }//GEN-LAST:event_jButtonAceptarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButtonAceptar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -180,6 +254,11 @@ public class VistaRegistroAsistencia extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JRadioButton jRadioButtonIngresoManiana;
+    private javax.swing.JRadioButton jRadioButtonIngresoTarde;
+    private javax.swing.JRadioButton jRadioButtonSalidaManiana;
+    private javax.swing.JRadioButton jRadioButtonSalidaTarde;
     private javax.swing.JTextField jTextFieldCI;
     // End of variables declaration//GEN-END:variables
 }

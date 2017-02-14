@@ -45,4 +45,9 @@ public class JTableEmpleados extends JTableGenerico {
             this.addEmpleado(empleados.get(i));
         }
     }
+    
+    @Override
+    public boolean isCellEditable(int i, int j) {
+        return false;
+    }
 }

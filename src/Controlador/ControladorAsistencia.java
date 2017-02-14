@@ -86,7 +86,7 @@ public class ControladorAsistencia {
         return this.modeloTiempo.getHoraActual();
     }
 
-    public boolean registrarAsistencia(int ciEmpleado, Date fechaActual, Time horaActual) {
+    public boolean registrarAsistencia(int ciEmpleado, Date fechaActual, Time horaActual, String tipoAsistencia) {
 
         boolean exitoso = false;
         
@@ -95,12 +95,8 @@ public class ControladorAsistencia {
             String horaActualCadena = this.getHoraCadena(horaActual);
 
             //registramos los datos
-            int registrado = ModeloAsistencia.REGISTRADO_ERROR;
-            if (horaActualCadena.compareTo("13:30") >= 0) {
-                registrado = this.registrarAsistenciaTarde(ciEmpleado, fechaActual, horaActual);
-            } else if (horaActualCadena.compareTo("07:50") >= 0) {
-                registrado = this.registrarAsistenciaManiana(ciEmpleado, fechaActual, horaActual);
-            }
+            int registrado = this.modeloAsistencia.registrarAsistencia(ciEmpleado, fechaActual, horaActual, tipoAsistencia);
+            
             //recuperamos los datos del empleado
             Empleado e = this.modeloEmpleado.selectEmpleadoPorCI(ciEmpleado);
             
@@ -161,13 +157,5 @@ public class ControladorAsistencia {
             res = res + minutosI;
         }
         return res;
-    }
-
-    public int registrarAsistenciaManiana(int ciEmpleado, Date fecha, Time hora) throws SQLException {
-        return this.modeloAsistencia.insertAsistenciaManiana(ciEmpleado, fecha, hora);
-    }
-
-    public int registrarAsistenciaTarde(int ciEmpleado, Date fecha, Time hora) throws SQLException {
-        return this.modeloAsistencia.insertAsistenciaTarde(ciEmpleado, fecha, hora);
     }
 }
