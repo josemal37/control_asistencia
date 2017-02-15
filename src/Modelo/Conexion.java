@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class Conexion {
 
     public static final String URL = "jdbc:postgresql://%s:%s/%s";
-    public static final String DEFAULT_DATABASE = "fundatca_personal_2";
+    public static final String DEFAULT_DATABASE = "fundatca_personal";
     public static final String DEFAULT_DATABASE_IP = "127.0.0.1";
     public static final String DEFAULT_DATABASE_USERNAME = "fundatca_per";
     public static final String DEFAULT_DATABASE_PASSWORD = "personal123";
