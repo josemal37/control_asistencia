@@ -5,11 +5,15 @@
  */
 package Modelo;
 
+import Dominio.Empleado;
+import Dominio.Reporte.DatosReporte;
+import Dominio.Reporte.RegistroAsistencia;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
 
 /**
  *
@@ -99,6 +103,20 @@ public class ModeloAsistencia extends Conexion {
             + "fecha_asistencia = ? AND "
             + "%s is not null ";
 
+    private static final String SELECT_REGISTROS_REPORTE_EMPLEADO = 
+            "select "
+            + "asistencia.fecha_asistencia, "
+            + "asistencia.ingreso_maniana, "
+            + "asistencia.salida_maniana, "
+            + "asistencia.ingreso_tarde, "
+            + "asistencia.salida_tarde "
+            + "from "
+            + "asistencia "
+            + "where "
+            + "asistencia.ci_empleado = ? and "
+            + "extract(month from asistencia.fecha_asistencia) = ? and "
+            + "extract(year from asistencia.fecha_asistencia) = ? ";
+
     //Tipos de asistencia segun la base de datos
     public static final String INGRESO_MANIANA = "ingreso_maniana";
     public static final String SALIDA_MANIANA = "salida_maniana";
@@ -116,6 +134,48 @@ public class ModeloAsistencia extends Conexion {
 
     public ModeloAsistencia() throws ClassNotFoundException, SQLException {
         super();
+    }
+
+    public ArrayList<DatosReporte> selectAsistenciaMes(int mes, int anio) throws ClassNotFoundException, SQLException {
+        ArrayList<DatosReporte> res = new ArrayList();
+
+        ModeloEmpleado me = new ModeloEmpleado();
+        ArrayList<Empleado> empleados = me.selectEmpleados();
+
+        if (empleados.size() > 0) {
+            for (int i = 0; i < empleados.size(); i++) {
+                res.add(this.selectAsistenciaEmpleadoMes(empleados.get(i), mes, anio));
+            }
+        }
+
+        return res;
+    }
+    
+    public DatosReporte selectAsistenciaEmpleadoMes(Empleado e, int mes, int anio) throws SQLException {
+        DatosReporte dr = new DatosReporte();
+        
+        dr.setEmpleado(e);
+        int idEmpleado = e.getCi();
+        
+        PreparedStatement pst = this.getConexion().prepareStatement(SELECT_REGISTROS_REPORTE_EMPLEADO);
+        pst.setInt(1, idEmpleado);
+        pst.setInt(2, mes);
+        pst.setInt(3, anio);
+        
+        ResultSet rs = pst.executeQuery();
+        
+        while(rs.next()) {
+            RegistroAsistencia r = new RegistroAsistencia();
+            r.setFecha(rs.getString("fecha_asistencia"));
+            r.setIngresoManiana(rs.getString("ingreso_maniana"));
+            r.setSalidaManiana(rs.getString("salida_maniana"));
+            r.setIngresoTarde(rs.getString("ingreso_tarde"));
+            r.setSalidaTarde(rs.getString("salida_tarde"));
+            
+            dr.addRegistro(r);
+        }
+        
+        return dr;
     }
 
     public int registrarAsistencia(int ciEmpleado, Date fecha, Time hora, String tipoAsistencia) throws SQLException {
